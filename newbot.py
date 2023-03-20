@@ -3,7 +3,7 @@ import time
 import telebot
 import json
 
-token = '5704102318:AAGmxtR9c-9o5tjUdf_UH_9HJPtMXiijjDo'
+token = 'по безопасности '
 
 bot = telebot.TeleBot(token)
 #global chislo
