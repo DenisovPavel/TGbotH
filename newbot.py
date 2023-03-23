@@ -93,11 +93,7 @@ def timechecker(message):
     with open("time.txt",'w',encoding="utf-8")as file:
         file.write(str(message.chat.id))
         file.write(''+str(message.text))
-# while True:
-#     now =datetime.datetime.now()
-#     current_time=now.strftime("%H:%M")
-#     if current_time==times:
-#         bot.send_message(int(chat),"Напоминание!Время подошло!")
+
 
 @bot.message_handler(content_types=['text'])
 def chislo_checker(message):
