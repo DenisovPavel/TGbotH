@@ -1,9 +1,14 @@
 import telebot
 import json
+import  requests
+from bs4 import  BeautifulSoup as b
+import random
 
-token = '#по соображениям безопасности'
+token = 'according security'
 
 bot = telebot.TeleBot(token)
+
+
 
 with open("AVARII.json","r",encoding='utf-8') as avi:
     some_dict1=json.load(avi)
@@ -30,7 +35,8 @@ def welcome(message):
     item5 = telebot.types.KeyboardButton('Мне стало плохо!')
     item6 = telebot.types.KeyboardButton('Тел-ны экст. служб!')
     item7 = telebot.types.KeyboardButton('Служба психологической поддержки!')
-    markup.add(item1, item2, item3, item4, item5, item6 ,item7)
+    item8 = telebot.types.KeyboardButton('Анекдот!')
+    markup.add(item1, item2, item3, item4, item5, item6, item7, item8)
     bot.send_message(message.chat.id, 'Добро пожаловать! Выберите нужный вам пункт меню: ', reply_markup=markup)
 
 @bot.message_handler(content_types=['text'])
@@ -106,6 +112,11 @@ def answer(message):
     bot.send_message(message.chat.id, 'Выбери свой пункт!', reply_markup=markup)
     bot.register_next_step_handler(message, psy)
 
+  elif message.text =='Анекдот!':
+      bot.send_message(message.chat.id,"Здравствуйте! Чтобы прочитать анекдот введите любую цифру:")
+      bot.message_handler(content_types=['text'])
+      bot.register_next_step_handler(message, jokes)
+
   else:
       bot.send_message(message.chat.id, 'Выбери свой пункт!')
 
@@ -178,4 +189,21 @@ def psy(message):
         bot.send_message(message.chat.id, some_dict7 [message.text], reply_markup=markup)
         bot.register_next_step_handler(message, psy)
 
-bot.polling(none_stop=True) #бесконечная работа бота
+@bot.message_handler(content_types=['text']) #anekdots
+def jokes(message):
+    if message.text.lower() in "123456789":
+        bot.send_message(message.chat.id,list_jokes[0])
+        del list_jokes[0]
+#     else:
+        bot.send_message(message.chat.id, " Введите цифру от 1-9! ")
+URL = "https://www.anekdot.ru/last/good/"
+def parser(url):
+    r = requests.get(url)
+    soup = b(r.text, "html.parser")
+    anekdots = soup.find_all('div', class_='text')
+    return [i.text for i in anekdots]
+list_jokes = parser(URL)
+random.shuffle(list_jokes)
+
+
+bot.polling(none_stop=True)
