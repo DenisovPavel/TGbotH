@@ -194,7 +194,7 @@ def jokes(message):
     if message.text.lower() in "123456789":
         bot.send_message(message.chat.id,list_jokes[0])
         del list_jokes[0]
-#     else:
+    else:
         bot.send_message(message.chat.id, " Введите цифру от 1-9! ")
 URL = "https://www.anekdot.ru/last/good/"
 def parser(url):
